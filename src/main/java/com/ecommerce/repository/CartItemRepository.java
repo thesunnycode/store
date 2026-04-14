@@ -10,6 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-    // Check if this product is already in this cart (for updating quantity vs inserting new row)
     Optional<CartItem> findByCartAndProduct(Cart cart, Product product);
 }

@@ -5,10 +5,8 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
-/** DTO for Admin: POST /api/products and PUT /api/products/{id} */
 @Data
 public class ProductRequest {
-
     @NotBlank(message = "Product name is required")
     private String name;
 

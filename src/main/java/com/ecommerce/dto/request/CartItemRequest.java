@@ -4,10 +4,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-/** DTO for POST /api/cart/items and PUT /api/cart/items/{itemId} */
 @Data
 public class CartItemRequest {
-
     @NotNull(message = "Product ID is required")
     private Long productId;
 

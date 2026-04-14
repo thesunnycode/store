@@ -6,13 +6,6 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Product entity — maps to the "products" table.
- *
- * BigDecimal is used for price instead of double/float because floating-point
- * types can produce rounding errors in financial calculations (e.g., 0.1 + 0.2 ≠ 0.3).
- * BigDecimal is exact and safe for money.
- */
 @Entity
 @Table(name = "products")
 @Getter
@@ -21,7 +14,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,23 +21,23 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
-    @Column(columnDefinition = "TEXT") // TEXT type allows descriptions longer than VARCHAR(255)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(nullable = false, precision = 10, scale = 2) // stores up to 99999999.99
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
     @Column(nullable = false)
-    private Integer stockQuantity;         // how many units are in inventory
+    private Integer stockQuantity;
 
     @Column(nullable = false)
     private String category;
 
-    private String imageUrl;               // URL to product image (e.g., Cloudinary/S3 link)
+    private String imageUrl;
 
     @Column(nullable = false)
     @Builder.Default
-    private Boolean active = true;         // soft delete: false = hidden from catalog, not deleted
+    private Boolean active = true;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -58,7 +50,7 @@ public class Product {
         this.updatedAt = LocalDateTime.now();
     }
 
-    @PreUpdate                             // JPA lifecycle hook — called before every UPDATE
+    @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }

@@ -9,16 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Order entity — a confirmed purchase by a customer.
- *
- * Unlike CartItem, OrderItem stores the price AT THE TIME OF PURCHASE.
- * This is important: if the product price changes later, the order history
- * should still show what the customer actually paid.
- *
- * stripePaymentIntentId → Stripe's reference ID for the payment transaction.
- *   We store this for: refunds, dispute resolution, reconciliation.
- */
 @Entity
 @Table(name = "orders")
 @Getter
@@ -27,7 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,9 +37,9 @@ public class Order {
     @Builder.Default
     private OrderStatus status = OrderStatus.PENDING;
 
-    private String stripePaymentIntentId;  // Stripe transaction reference (null until payment succeeds)
+    private String stripePaymentIntentId;
 
-    private String shippingAddress;        // stored as plain text; could be a separate entity for complex apps
+    private String shippingAddress;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

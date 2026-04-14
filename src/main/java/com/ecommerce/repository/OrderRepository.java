@@ -11,13 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-
-    // Customer: see only their own orders, paginated
     Page<Order> findByUser(User user, Pageable pageable);
 
-    // Used when confirming a Stripe payment — look up order by Stripe's payment ID
     Optional<Order> findByStripePaymentIntentId(String stripePaymentIntentId);
 
-    // Verify an order belongs to this user (prevents one customer viewing another's order)
     Optional<Order> findByIdAndUser(Long id, User user);
 }

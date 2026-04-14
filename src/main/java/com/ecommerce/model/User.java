@@ -11,55 +11,39 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * User entity — maps to the "users" table in MySQL.
- *
- * This class also implements UserDetails, which is Spring Security's interface
- * for a logged-in user. By implementing it here, we avoid creating a separate
- * wrapper class — Spring Security can work with User objects directly.
- */
 @Entity
-@Table(name = "users")                     // maps to the "users" table (avoid reserved word "user")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User implements UserDetails {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true) // email must be unique — used as login username
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    private String password;               // stored as bcrypt hash, NEVER plain text
+    private String password;
 
-    @Enumerated(EnumType.STRING)           // stores "ADMIN" or "CUSTOMER" as text in DB (not 0/1)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
-    @Column(nullable = false, updatable = false) // set once at creation, never updated
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @PrePersist                            // JPA lifecycle hook — called before INSERT
+    @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // ── Spring Security UserDetails methods ─────────────────────────────────
-
-    /**
-     * Returns the authorities (permissions) granted to this user.
-     * Spring Security checks these to decide if a user can access a secured endpoint.
-     * We prefix with "ROLE_" because Spring Security's @PreAuthorize("hasRole('ADMIN')")
-     * internally looks for "ROLE_ADMIN" in the authorities list.
-     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
@@ -67,7 +51,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;                      // we use email as the username for login
+        return email;
     }
 
     @Override

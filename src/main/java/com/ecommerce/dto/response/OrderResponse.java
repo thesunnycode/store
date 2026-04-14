@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/** OrderResponse — order details returned to customer and admin */
 @Data
 @Builder
 public class OrderResponse {
